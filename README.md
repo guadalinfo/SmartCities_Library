@@ -5,8 +5,8 @@ Se dividen en 5 categorías:
 ## [Base](https://github.com/javacasm/SmartCities_Comunes)
 1. LED
 1. Comunicación PC
-1. LCD
 1. Temperatura, humedad, presión: BME-280
+1. LCD
 1. Ajustes: Potenciómetro
 1. Wifi
 1. I2C Scanner
