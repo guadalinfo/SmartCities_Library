@@ -7,6 +7,9 @@ Please type on your browser http://<IP>/arduino/webserver/ or http://<hostname>.
 Note: works only with Arduino Uno WiFi Developer Edition.
 
 http://www.arduino.org/learning/tutorials/boards-tutorials/webserverblink
+
+Referencia: https://www.luisllamas.es/arduino-intensidad-consumo-electrico-acs712/
+
 */
 
 #include <Wire.h>
