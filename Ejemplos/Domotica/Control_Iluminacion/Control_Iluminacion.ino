@@ -61,12 +61,12 @@ void loop() {
   Serial.print(" - ");
   Serial.println(iPotenciometro);
 
-  if(abs(iPotenciometro-iLuz)<UMBRAL){
+  if(iLuz+UMBRAL>iPotenciometro){
       enciendeLuz();
   } else {
     apagaLuz();
   }
-  delay(espera)
+  delay(ESPERA);
 }
 /* ==== End Loop ==== */
 
