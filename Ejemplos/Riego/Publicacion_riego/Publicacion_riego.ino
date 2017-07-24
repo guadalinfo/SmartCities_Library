@@ -19,7 +19,7 @@ Conexiones
 #define SERVER_ADDR   "api.thingspeak.com"
 #define intervalo     30000
 
-#define APIKEY_THINGSPEAK  "2D9Z8DWIMI16HF7R" //Insert your API Key
+#define APIKEY_THINGSPEAK  "UC3QL166QDZW9Q30" //Insert your API Key
 
 #define SERIAL_BAUD     9600
 
