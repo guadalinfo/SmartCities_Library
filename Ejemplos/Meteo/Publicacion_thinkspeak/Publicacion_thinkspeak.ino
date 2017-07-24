@@ -9,7 +9,7 @@ After that, replace the "XXXXXXXXX" value of APIKEY_THINGSPEAK with "Write API k
 */
 #include <Wire.h>
 #include <UnoWiFiDevEd.h>
- #include <BME280I2C.h>
+#include <BME280I2C.h>
 
 #define CONNECTOR     "rest"
 #define SERVER_ADDR   "api.thingspeak.com"
