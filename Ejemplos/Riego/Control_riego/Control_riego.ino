@@ -48,6 +48,10 @@ long lIntervaloMedida=1000;  // Para un sistema real sería no menos de un minut
 long lUltimaMedida=0;
 int iUmbral=20;
 
+int iHumedad;
+int iPotenciometro;
+int iLLuvia;
+
 /* ==== END Global Variables ==== */
 
 
@@ -84,9 +88,7 @@ void setup() {
 /* ==== END Setup ==== */
 
 /* ==== Loop ==== */
-int iHumedad;
-int iPotenciometro;
-int iLLuvia;
+
 
 void loop() {
 
