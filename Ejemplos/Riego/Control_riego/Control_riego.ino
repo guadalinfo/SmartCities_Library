@@ -35,8 +35,8 @@ Rele de bomba de riego  12
 
 #define PIN_RELE          12
 
-#define MSG_RIEGO_ON F("RIEGO ON");
-#define MSG_RIEGO_OFF F("RIEGO OFF");
+#define MSG_RIEGO_ON F("RGO. ON")
+#define MSG_RIEGO_OFF F("RGO. OFF")
 
 /* ==== END Defines ==== */
 
@@ -44,7 +44,7 @@ Rele de bomba de riego  12
 // Set the LCD address to 0x27 for a 16 chars and 2 line display
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-long lIntervaloMedida=2000;
+long lIntervaloMedida=100;
 long lUltimaMedida=0;
 int iUmbral=20;
 
@@ -97,7 +97,11 @@ void loop() {
     iPotenciometro=analogRead(PIN_POTENCIOMETRO);
     showData();
     if(iPotenciometro-iHumedad>iUmbral){
+      if(iLLuvia>512){
        enciendeRiego();
+      }else{
+        apagaRiego();
+      }
      } else {
        apagaRiego();
      }
@@ -130,6 +134,7 @@ void showData(){
   lcd.setCursor(8,1);
   lcd.print("Llv:");
   lcd.print(iLLuvia);
+  lcd.print("  ");
 }
 
 void enciendeRiego(){
