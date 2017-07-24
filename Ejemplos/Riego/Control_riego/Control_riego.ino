@@ -44,7 +44,7 @@ Rele de bomba de riego  12
 // Set the LCD address to 0x27 for a 16 chars and 2 line display
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-long lIntervaloMedida=100;
+long lIntervaloMedida=1000;  // Para un sistema real sería no menos de un minuto
 long lUltimaMedida=0;
 int iUmbral=20;
 
@@ -106,6 +106,7 @@ void loop() {
        apagaRiego();
      }
      lUltimaMedida=millis();
+     dormir(lIntervaloMedida);
   }
 
 }
@@ -152,5 +153,8 @@ void apagaRiego(){
 
 }
 
+void dormir(long espera){
+  delay(espera);
+}
 
 /* ==== END Functions ==== */
