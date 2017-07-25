@@ -48,9 +48,10 @@ long lIntervaloMedida=1000;  // Para un sistema real sería no menos de un minut
 long lUltimaMedida=0;
 int iUmbral=20;
 
-int iHumedad;
-int iPotenciometro;
-int iLLuvia;
+int iHumedad;        // Nivel de humedad del suelo
+int iPotenciometro;  // Umbral de activacion del riego
+int iLLuvia;   // Nivel de lluvia (o de rocio en el sensor de lluvia)
+int iRiego=0;  // Indica si el riego esta on o no
 
 /* ==== END Global Variables ==== */
 
