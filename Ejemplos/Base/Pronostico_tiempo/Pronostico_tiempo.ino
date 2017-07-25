@@ -1,26 +1,48 @@
 /*
-Descripcion
+ Web Client to consume Weather Underground web service
 
-Recuperar pronostico meteo
+ This sketch connects to a website (http://api.wunderground.com)
+ using an Arduino Ethernet shield and get data from site.
 
-http://api.wunderground.com/api/6764fe6f32eb379c/conditions/q/Spain/Granada.json
+ Circuit:
+ * Arduino MEGA 2560 R3 Board
+ * Ethernet shield attached to pins 10, 11, 12, 13
 
-
-Ejemplo: https://gist.github.com/acturcato/8352621
-Conexiones
-
+ created 07 Jan 2014
+ by Afonso C. Turcato
 
  */
 
-
 /* ==== Includes - Librerias==== */
+#include <Wire.h>
+#include <UnoWiFiDevEd.h>
 
 /* ====  END Includes ==== */
 
+
 /* ==== Defines - Constantes ==== */
+#define CONNECTOR     "rest"
+#define SERVER_ADDR   "api.wunderground.com"
+#define intervalo     3000
+
+#define myKey "6764fe6f32eb379c"
+#define myFeatures "conditions"
+#define myCountry  "Spain"
+#define myCity   "Granada"
+
+#define SERIAL_BAUD     9600
+
+
 /* ==== END Defines ==== */
 
 /* ==== Variables Globales ==== */
+
+
+
+//Response from Server
+String responseString;
+
+boolean startCapture;
 
 /* ==== END Global Variables ==== */
 
@@ -30,37 +52,93 @@ Conexiones
 /* ==== END Prototypes ==== */
 
 /* ==== Setup - Configuracion==== */
+
+void setup_Serial(){
+  Serial.begin(SERIAL_BAUD);
+}
+
+void setup_nube(){
+  Ciao.begin(); // CIAO INIT
+}
+
 void setup() {
+  setup_Serial();
+  setup_nube();
 
 }
-/* ==== END Setup ==== */
 
-/* ==== Loop - Codigo que se repite==== */
-void loop() {
-}
-/* ==== End Loop ==== */
+void loop()
+{
 
-/* ==== Funciones ==== */
-void analiza(){
-  Serial.print("Weather: ");
- Serial.println(getValuesFromKey(responseString, "weather"));
- Serial.println();
+    String uri = String("/api/") + myKey + "/" + myFeatures + "/q/" + myCountry + "/" + myCity + ".json";
+    String html_cmd2 = "Host: " + (String)SERVER_ADDR;
+    String html_cmd3 = "Connection: close";
 
- Serial.print("Current Temperature: ");
- Serial.print(getValuesFromKey(responseString, "temp_c"));
- Serial.println(" oC\n");
 
- Serial.print("Relativy Humidity: ");
- Serial.println(getValuesFromKey(responseString, "relative_humidity"));
- Serial.println();
+    // Make a HTTP request:
+    Ciao.print(SERVER_ADDR);
+    Ciao.println(uri);
+    Serial.print(SERVER_ADDR);
+    Serial.println(uri);
 
- Serial.print("Wind: ");
- Serial.println(getValuesFromKey(responseString, "wind_string"));
- Serial.println();
+    CiaoData data=Ciao.write(CONNECTOR, SERVER_ADDR, uri);
+    delay(2000);
+     Serial.println(uri);
+    if (!data.isEmpty()){
+      Ciao.println( "State: " + String (data.get(1)) );
+      Ciao.println( "Response: " + String (data.get(2)) );
+      Serial.println(data.get(1));
+      Serial.println(data.get(2));
+    }   else   {
+      Ciao.println("No response");
+  /*
+      if(data.isError()){
 
- Serial.print("Feels like: ");
- Serial.print(getValuesFromKey(responseString, "feelslike_c"));
- Serial.println(" oC\n");
+        Ciao.print("Error:");
+        String id = data.get(0);
+
+        String error = data.get(2);
+        Ciao.println(id);
+        Ciao.println(error);
+       } else {
+        Ciao.print("No Error");
+      } */
+    }
+  }
+  /*
+  // if the server's disconnected, stop the client:
+  if (!client.connected()) {
+    Serial.println("Received " + (String)responseString.length() + " bytes");
+    Serial.println("Disconnecting.");
+    client.stop();
+    client.flush();
+
+    Serial.println();
+
+    //Now, some examples of how to use it!
+    Serial.print("Weather: ");
+    Serial.println(getValuesFromKey(responseString, "weather"));
+    Serial.println();
+
+    Serial.print("Current Temperature: ");
+    Serial.print(getValuesFromKey(responseString, "temp_c"));
+    Serial.println(" oC\n");
+
+    Serial.print("Relativy Humidity: ");
+    Serial.println(getValuesFromKey(responseString, "relative_humidity"));
+    Serial.println();
+
+    Serial.print("Wind: ");
+    Serial.println(getValuesFromKey(responseString, "wind_string"));
+    Serial.println();
+
+    Serial.print("Feels like: ");
+    Serial.print(getValuesFromKey(responseString, "feelslike_c"));
+    Serial.println(" oC\n");
+
+    // do nothing forevermore:
+    while(true);
+  }*/
 }
 
 String getValuesFromKey(const String response, const String sKey)
@@ -75,7 +153,7 @@ String getValuesFromKey(const String response, const String sKey)
 
   int keySize = sizeof(key)-1;
 
-  String result = NULL;
+  String result ="";
 
   int n = response.length();
 
@@ -107,5 +185,12 @@ String getValuesFromKey(const String response, const String sKey)
         result += response.charAt(j);
         j++;
       }
-      
-/* ==== END Functions ==== */
+
+      //Remove char '"'
+      result.replace("\"","");
+      break;
+    }
+  }
+
+  return result;
+}
