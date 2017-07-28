@@ -34,6 +34,21 @@ LiquidCrystal_I2C lcd(0x3F, 16, 2);
 /* ==== END Prototypes ==== */
 
 /* ==== Setup ==== */
+
+void setup_Serial(){
+  Serial.begin(SERIAL_BAUD);
+  while(!Serial) {} // Wait
+
+}
+
+
+void setup_LCD(){
+  lcd.init();         // Inicializamos el LCD
+  lcd.backlight();    // Encendemos la luz
+}
+
+
+
 void setup() {
   setup_Serial();
   setup_LCD();
@@ -53,18 +68,6 @@ void loop() {
 /* ==== End Loop ==== */
 
 /* ==== Functions ==== */
-
-void setup_Serial(){
-  Serial.begin(SERIAL_BAUD);
-  while(!Serial) {} // Wait
-
-}
-
-
-void setup_LCD(){
-  lcd.init();         // Inicializamos el LCD
-  lcd.backlight();    // Encendemos la luz
-}
 
 
 /* ==== END Functions ==== */
