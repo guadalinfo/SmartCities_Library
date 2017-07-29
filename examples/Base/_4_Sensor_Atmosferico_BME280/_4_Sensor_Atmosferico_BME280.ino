@@ -47,8 +47,9 @@ SCK (Serial Clock)  ->  A5 on Uno/Pro-Mini, 21 on Mega2560/Due, 3 Leonardo/Pro-M
 /* ==== END Defines ==== */
 
 /* ==== Global Variables ==== */
-// Set the LCD address to 0x27 for a 16 chars and 2 line display
-LiquidCrystal_I2C lcd(0x27, 16, 2);
+// Set the LCD address to 0x27 or 0x3F for a 16 chars and 2 line display
+//LiquidCrystal_I2C lcd(0x27, 16, 2);
+LiquidCrystal_I2C lcd(0x3F, 16, 2);
 
 
 BME280I2C bme;                   // Default : forced mode, standby time = 1000 ms
@@ -68,18 +69,18 @@ void printBME280CalculatedData(Stream* client);
 
 /* ==== Setup ==== */
 void setup() {
-  setup_Serial();  
+  setup_Serial();
   setup_BME280();
   setup_LCD();
-  
-  
- 
+
+
+
 }
 /* ==== END Setup ==== */
 
 /* ==== Loop ==== */
 void loop() {
-   
+
    lee_datos();
    serial_datos();
    lcd_datos();
@@ -93,7 +94,7 @@ void loop() {
 void setup_Serial(){
   Serial.begin(SERIAL_BAUD);
   while(!Serial) {} // Wait
-  
+
 }
 
 void setup_BME280(){
@@ -101,24 +102,24 @@ void setup_BME280(){
     Serial.println("Could not find BME280 sensor!");
     delay(1000);
   }
-  
+
 }
 
 void setup_LCD(){
   lcd.init();         // Inicializamos el LCD
-  lcd.backlight();    // Encendemos la luz 
+  lcd.backlight();    // Encendemos la luz
 }
 
 void lee_datos(){
-   bme.read(pres, temp, hum, metric, pressureUnit);                   // Parameters: (float& pressure, float& temp, float& humidity, bool celsius = false, uint8_t pressureUnit = 0x0)  
+   bme.read(pres, temp, hum, metric, pressureUnit);                   // Parameters: (float& pressure, float& temp, float& humidity, bool celsius = false, uint8_t pressureUnit = 0x0)
 }
 
 void serial_datos(){
    Serial.print("Temp: ");
    Serial.print(temp);
    Serial.print("°C");
-   
-   
+
+
    Serial.print(" Humedad: ");
    Serial.print(hum);
    Serial.print("% ");
@@ -126,8 +127,8 @@ void serial_datos(){
 
    Serial.print("\t\tPressure: ");
    Serial.print(pres);
-   Serial.print(" atm");
-  
+   Serial.println(" atm");
+
 }
 void lcd_datos(){
 
@@ -140,7 +141,7 @@ void lcd_datos(){
    lcd.print(hum);
    lcd.print("%");
 
-   
+
    lcd.setCursor(0,1);
    lcd.print("P:");
    lcd.print(pres);
