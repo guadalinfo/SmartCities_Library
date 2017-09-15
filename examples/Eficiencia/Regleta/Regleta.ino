@@ -101,13 +101,13 @@ void loop() {
     if((unsigned long)(millis() - previousMillis) >= printPeriod) {
       previousMillis = millis();   // update time
 
-      // display current values to the screen
-      Serial.print( "\n" );
-      // output sigma or variation values associated with the inputValue itsel
-      Serial.print( "\tsigma: " ); Serial.print( inputStats.sigma() );
+
+
       // convert signal sigma value to current in amps
       current_amps = intercept + slope * inputStats.sigma();
-      Serial.print( "\tamps: " ); Serial.print( current_amps );
+      Serial.print( current_amps );
+      Serial.print( "," );
+      Serial.println( inputStats.sigma() );
       lcd.setCursor(0,0);
       lcd.print(current_amps);
     }
