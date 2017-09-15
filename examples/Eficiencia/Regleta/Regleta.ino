@@ -33,8 +33,8 @@ Sensor de corriente ->  pin A0
 
 /* ==== Global Variables ==== */
 // Set the LCD address to 0x27 or 0x3F for a 16 chars and 2 line display
-//LiquidCrystal_I2C lcd(0x27, 16, 2);
-LiquidCrystal_I2C lcd(0x3F, 16, 2);
+LiquidCrystal_I2C lcd(0x27, 16, 2);
+//LiquidCrystal_I2C lcd(0x3F, 16, 2);
 
 /* ==== END Global Variables ==== */
 
@@ -64,28 +64,30 @@ void setup() {
   setup_Serial();
   setup_LCD();
   setup_Rele();
+
+  enciende_Rele();
 }
 /* ==== END Setup ==== */
 
 /* ==== Loop ==== */
 void loop() {
    int iValorSensorCorriente=analogRead(PIN_SENSOR_CORRIENTE);
-   lcd.setCursor(0,0);
-   lcd.print("Hola LCD ");
-   digitalWrite(PIN_RELE,HIGH);
+
    lcd.setCursor(0,1);
    lcd.print(iValorSensorCorriente);
-   delay(500);
-   lcd.setCursor(0,0);
-   lcd.print("Adios LCD");
-   digitalWrite(PIN_RELE,LOW);
-   delay(500);
-   lcd.setCursor(0,1);
-   lcd.print(iValorSensorCorriente);
+   Serial.println(iValorSensorCorriente);
+   delay(20);
 }
 /* ==== End Loop ==== */
 
 /* ==== Functions ==== */
+void enciende_Rele(){
+  digitalWrite(PIN_RELE,HIGH);
+}
+
+void apaga_Rele(){
+  digitalWrite(PIN_RELE,LOW);
+}
 
 
 /* ==== END Functions ==== */
