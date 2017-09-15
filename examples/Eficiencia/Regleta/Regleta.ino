@@ -1,5 +1,5 @@
 /*
-Control remoto de una
+Control remoto de una regleta que mide el consumo y lo muestra por el LCD
 
 Conexion del LCD
 -----------------------------
@@ -17,9 +17,11 @@ Sensor de corriente ->  pin A0
 
 
 /* ==== Includes ==== */
+// Librerias para la pantalla LCD
 #include <Wire.h>               // Needed for legacy versions of Arduino.
 #include <LiquidCrystal_I2C.h>  // Pantalla LCD
 
+// Libreria para filtrado
 #include <Filters.h>
 
 
@@ -44,8 +46,8 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 float testFrequency = 60;                     // test signal frequency (Hz)
 float windowLength = 20.0/testFrequency;     // how long to average the signal, for statistist
 int sensorValue = 0;
-float intercept = -0.1129; // to be adjusted based on calibration testing
-float slope = 0.0405; // to be adjusted based on calibration testing
+float intercept = -0.02;//-0.1129; // to be adjusted based on calibration testing
+float slope = 0.066; // 0.0405; // to be adjusted based on calibration testing
 float current_amps; // estimated actual current in amps
 
 unsigned long printPeriod = 1000; // in milliseconds
