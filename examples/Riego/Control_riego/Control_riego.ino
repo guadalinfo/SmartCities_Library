@@ -36,13 +36,14 @@ Rele de bomba de riego  12
 #define PIN_RELE          12
 
 #define MSG_RIEGO_ON F("RGO. ON")
-#define MSG_RIEGO_OFF F("RGO. OFF")
+#define MSG_RIEGO_OFF F("RGO.OFF")
 
 /* ==== END Defines ==== */
 
 /* ==== Global Variables ==== */
 // Set the LCD address to 0x27 for a 16 chars and 2 line display
-LiquidCrystal_I2C lcd(0x27, 16, 2);
+//LiquidCrystal_I2C lcd(0x27, 16, 2);
+LiquidCrystal_I2C lcd(0x3F, 16, 2);
 
 long lIntervaloMedida=1000;  // Para un sistema real sería no menos de un minuto
 long lUltimaMedida=0;
@@ -95,12 +96,12 @@ void loop() {
 
   if(millis()-lUltimaMedida>lIntervaloMedida){ // Toca Medir
 
-    iHumedad=analogRead(PIN_SENSOR_SUELO);
-    iLLuvia=analogRead(PIN_SENSOR_LLUVIA);
+    iHumedad=1023-analogRead(PIN_SENSOR_SUELO);
+    iLLuvia=1023-analogRead(PIN_SENSOR_LLUVIA);
     iPotenciometro=analogRead(PIN_POTENCIOMETRO);
     showData();
-    if(iPotenciometro-iHumedad>iUmbral){
-      if(iLLuvia>512){
+    if(iPotenciometro-iUmbral>iHumedad){
+      if(iLLuvia<512){
        enciendeRiego();
       }else{
         apagaRiego();
@@ -121,7 +122,7 @@ void showData(){
   lcd.setCursor(0,0);
   lcd.print("Hum:");
   lcd.print(iHumedad);
-  lcd.print("  ");
+  lcd.print("    ");
 
   Serial.print("Hum:");
   Serial.print(iHumedad);
@@ -130,15 +131,15 @@ void showData(){
   lcd.setCursor(8,0);
   lcd.print("Umb:");
   lcd.print(iPotenciometro);
-  lcd.print("  ");
+  lcd.print("    ");
 
   Serial.print(" Umbral:");
   Serial.println(iPotenciometro);
 
   lcd.setCursor(8,1);
   lcd.print("Llv:");
-  lcd.print(iLLuvia);
-  lcd.print("  ");
+  lcd.print(iLLuvia/100);
+  lcd.print("    ");
 }
 
 void enciendeRiego(){
