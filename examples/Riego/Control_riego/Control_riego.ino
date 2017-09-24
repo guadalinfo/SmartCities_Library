@@ -138,7 +138,7 @@ void showData(){
 
   lcd.setCursor(8,1);
   lcd.print("Llv:");
-  lcd.print(iLLuvia/100);
+  lcd.print(iLLuvia/10);
   lcd.print("    ");
 }
 
