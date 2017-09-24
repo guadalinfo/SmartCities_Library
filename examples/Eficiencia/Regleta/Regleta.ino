@@ -60,13 +60,13 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 // Medida de corriente
 
 float testFrequency = 60;                     // test signal frequency (Hz)
-float windowLength = 60.0/testFrequency;     // how long to average the signal, for statistist
+float windowLength = 20.0/testFrequency;     // how long to average the signal, for statistist
 int sensorValue = 0;
 float intercept = -0.065;//-0.1129; // to be adjusted based on calibration testing
 float slope = 0.066; // 0.0405; // to be adjusted based on calibration testing
 float current_amps; // estimated actual current in amps
 
-unsigned long printPeriod = 2000; // in milliseconds
+unsigned long printPeriod = 1000; // in milliseconds
 
 // Track time in milliseconds since last reading
 unsigned long previousMillis = 0;
