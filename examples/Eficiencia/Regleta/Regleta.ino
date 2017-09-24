@@ -60,13 +60,14 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 // Medida de corriente
 
 float testFrequency = 60;                     // test signal frequency (Hz)
-float windowLength = 20.0/testFrequency;     // how long to average the signal, for statistist
+float windowLength = 60.0/testFrequency;     // how long to average the signal, for statistist
 int sensorValue = 0;
-float intercept = -0.02;//-0.1129; // to be adjusted based on calibration testing
+float intercept = -0.065;//-0.1129; // to be adjusted based on calibration testing
 float slope = 0.066; // 0.0405; // to be adjusted based on calibration testing
 float current_amps; // estimated actual current in amps
 
-unsigned long printPeriod = 1000; // in milliseconds
+unsigned long printPeriod = 2000; // in milliseconds
+
 // Track time in milliseconds since last reading
 unsigned long previousMillis = 0;
 
@@ -116,7 +117,7 @@ void setup_RTC(){
   else
     lcd.print(F("Escritura Bloqueada"));
 
-  delay ( 2000 );
+  delay ( 500 );
 
   // Setup time library
   lcd.clear();
@@ -127,7 +128,7 @@ void setup_RTC(){
   else
     lcd.print(F(" Error!"));
 
-  delay ( 2000 );
+  delay ( 500 );
 
   lcd.clear();
 
@@ -139,9 +140,9 @@ void setup() {
   setup_LCD();
   setup_Rele();
 
-  enciende_Rele();
-
   setup_RTC();
+
+  enciende_Rele();
 }
 /* ==== END Setup ==== */
 
@@ -157,7 +158,7 @@ void loop() {
   inputStats.setWindowSecs( windowLength );
 
   while( true ) {
-    sensorValue = analogRead(A0);  // read the analog in value:
+    sensorValue = analogRead(PIN_SENSOR_CORRIENTE);  // read the analog in value:
     inputStats.input(sensorValue);  // log to Stats function
 
     if((unsigned long)(millis() - previousMillis) >= printPeriod) {
@@ -167,11 +168,16 @@ void loop() {
 
       // convert signal sigma value to current in amps
       current_amps = intercept + slope * inputStats.sigma();
+      float current_watts=current_amps*220*0.95;
       Serial.print( current_amps );
       Serial.print( "," );
       Serial.println( inputStats.sigma() );
       lcd.setCursor(0,0);
       lcd.print(current_amps);
+      lcd.print("A  ");
+      lcd.print(current_watts);
+      lcd.print("w   ");
+
     }
   lcd.setCursor(0,1);
   showTime();
@@ -185,10 +191,17 @@ void loop() {
 /* ==== Functions ==== */
 void enciende_Rele(){
   digitalWrite(PIN_RELE,HIGH);
+  lcd.setCursor(13,1);
+  lcd.print(" On");
+  Serial.print(1);
 }
 
 void apaga_Rele(){
   digitalWrite(PIN_RELE,LOW);
+  lcd.setCursor(13,1);
+  lcd.print("Off");
+  Serial.print(0);
+
 }
 
 
