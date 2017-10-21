@@ -2,6 +2,9 @@
 
 Lectura de datos atmosferico que se muestran en el LCD
 Lectura de un sensor de humedad de suelo
+Publicamos los datos en la web
+
+http://192.168.1.<ID>/arduino/webserver
 
 https://github.com/javacasm/SmartCities_Domotica#sensor-bme280
 
@@ -21,6 +24,7 @@ GND   -> GND
 
 
 /* ==== Includes ==== */
+#include <UnoWiFiDevEd.h>       // Wifi
 #include <BME280I2C.h>          // Sensor meteo
 #include <Wire.h>               // Needed for legacy versions of Arduino.
 #include <LiquidCrystal_I2C.h>  // Pantalla LCD
@@ -61,9 +65,7 @@ void setup() {
   setup_Serial();
   setup_BME280();
   setup_LCD();
-
-
-
+  setup_wifi();
 }
 /* ==== END Setup ==== */
 
@@ -73,6 +75,11 @@ void loop() {
    lee_datos();
    serial_datos();
    lcd_datos();
+
+   while(Wifi.available()){ // Procesamos las peticiones wifi
+      process(Wifi);
+   }
+
    delay(500);
 }
 /* ==== End Loop ==== */
@@ -88,12 +95,17 @@ void setup_Serial(){
 void setup_BME280(){
   Wire.begin();
   while(!bme.begin()){
-    Serial.println("Could not find BME280 sensor!");
+    Serial.println(F("BME280 sensor mal conectado!"));
     delay(1000);
   }
   BME280::TempUnit tempUnit(BME280::TempUnit_Celcius);
   BME280::PresUnit presUnit(BME280::PresUnit_Pa);
 
+}
+
+void setup_wifi(){
+  Wifi.begin();
+  Wifi.println(F("Web Server is up"));
 }
 
 void setup_LCD(){
@@ -111,45 +123,86 @@ void lee_datos(){
 }
 
 void serial_datos(){
-   Serial.print("Temp: ");
-   Serial.print(temp);
-   Serial.print("°C");
+  Serial.print(F("Temp: "));
+  Serial.print(temp);
+  Serial.print(F("°C"));
 
 
-   Serial.print(" Humedad: ");
-   Serial.print(hum);
-   Serial.print("% ");
+  Serial.print(F(" Humedad: "));
+  Serial.print(hum);
+  Serial.print(F("% "));
 
 
-   Serial.print("\t\tPresion: ");
-   Serial.print(pres);
-   Serial.print(" atm");
+  Serial.print(F("\t\tPressure: "));
+  Serial.print(pres);
+  Serial.println(F(" atm"));
 
-   Serial.print("Humedad suelo: ");
+   Serial.print(F("Humedad suelo: "));
    Serial.println(iHumedadSuelo);
 
 }
 void lcd_datos(){
 
-   lcd.setCursor(0,0);
-   lcd.print("T:");
-   lcd.print(temp);
+  lcd.setCursor(0,0);
+  lcd.print(F("T:"));
+  lcd.print(temp);
 
-   lcd.setCursor(8,0);
-   lcd.print("H:");
-   lcd.print(hum);
-   lcd.print("%");
+  lcd.setCursor(8,0);
+  lcd.print(F("H:"));
+  lcd.print(hum);
+  lcd.print(F("%"));
 
 
-   lcd.setCursor(0,1);
-   lcd.print("P:");
-   lcd.print(pres);
-   lcd.print("atm");
+  lcd.setCursor(0,1);
+  lcd.print(F("P:"));
+  lcd.print(pres);
+  lcd.print(F("atm"));
 
    lcd.setCursor(8,1);
-   lcd.print("HS:");
+   lcd.print(F("HS:"));
    lcd.print(iHumedadSuelo);
-   lcd.print(" ");
+   lcd.print(F(" "));
 
 }
+
+void process(WifiData client) {
+  // read the command
+  String command = client.readStringUntil('/');
+
+  if (command == "webserver") {
+    WebServer(client);
+  }
+}
+void WebServer(WifiData client) {
+  client.println(F("HTTP/1.1 200 OK"));
+  client.println(F("Content-Type: text/html"));
+  client.println(F("Connection: close"));
+  client.println(F("Refresh: 5"));  // refresh the page automatically every  sec
+  client.println();
+  client.println(F("<html>"));
+  client.println(F("<head> <title>Datos Meteo</title> </head>"));
+  client.print(F("<body>"));
+
+  client.print(F("Temperatura:"));
+  client.print(temp);
+  client.print(F(" C<br/>"));
+
+  client.print(F("Humedad:"));
+  client.print(hum);
+  client.print(F(" % <br/>"));
+
+  client.print(F("Presion:"));
+  client.print(pres);
+  client.print(F(" atm <br/>"));
+
+  client.print(F("Humedad Suelo:"));
+  client.print(iHumedadSuelo);
+  client.print(F("<br/>"));
+
+  client.print(F("</body>"));
+  client.println(F("</html>"));
+  client.print(DELIMITER); // very important to end the communication !!!
+}
+
+
 /* ==== END Functions ==== */
