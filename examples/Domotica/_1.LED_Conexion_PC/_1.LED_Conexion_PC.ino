@@ -1,11 +1,13 @@
 /*
-Hello Led
+Hello Led & PC
+
+https://github.com/javacasm/SmartCities_Domotica#hello-led-y-pc
 
 Encendemos un led conectado al pin 13
 Enviamos al PC un aviso de que se ha encendido
 
 Conexiones
-Led: 
+Led:
 * Negativo - patilla corta - GND
 * Positivo - patilla larga - 13
 
@@ -44,7 +46,7 @@ void loop() {
   digitalWrite(PIN_LED,HIGH);  // Apagamos el LED
   Serial.println("Led apagado");
   delay(espera);               // Esperamos un tiempo
-  
+
 }
 /* ==== End Loop ==== */
 
