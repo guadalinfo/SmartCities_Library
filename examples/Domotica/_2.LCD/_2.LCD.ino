@@ -1,6 +1,8 @@
 /*
 Visualizacion de datos en el LCD
 
+https://github.com/javacasm/SmartCities_Domotica#lcd
+
 Conexion del LCD
 -----------------------------
 Vin (Voltage In)    ->  5V
