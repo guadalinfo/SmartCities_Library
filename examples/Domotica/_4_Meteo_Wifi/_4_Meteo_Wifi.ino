@@ -70,7 +70,7 @@ void loop() {
    serial_datos();
    lcd_datos();
 
-   while(Wifi.available()){
+   while(Wifi.available()){ // Procesamos las peticiones wifi
       process(Wifi);
    }
    delay(500);
