@@ -1,6 +1,7 @@
 /*
 
 Lectura de datos atmosferico que se muestran en el LCD
+Lectura de un sensor de humedad de suelo
 
 https://github.com/javacasm/SmartCities_Domotica#sensor-bme280
 
@@ -9,6 +10,11 @@ Vin (Voltage In)    ->  Vcc
 Gnd (Ground)        ->  Gnd
 SDA (Serial Data)   ->  A4
 SCK (Serial Clock)  ->  A5
+
+Sensor de Humedad de suelo
+A0    -> A0
+Vcc   -> V
+GND   -> GND
 
  */
 
@@ -25,6 +31,7 @@ SCK (Serial Clock)  ->  A5
 #define SERIAL_BAUD 9600
 #define pressureUnit 3
 #define metric true
+#define PIN_HUMEDAD_SUELO A0
 /* ==== END Defines ==== */
 
 /* ==== Global Variables ==== */
@@ -38,6 +45,7 @@ BME280I2C bme;                   // Default : forced mode, standby time = 1000 m
 
 float temp(NAN), hum(NAN), pres(NAN);
 
+int iHumedadSuelo;
 /* ==== END Global Variables ==== */
 
 
@@ -65,7 +73,6 @@ void loop() {
    lee_datos();
    serial_datos();
    lcd_datos();
-
    delay(500);
 }
 /* ==== End Loop ==== */
@@ -79,10 +86,13 @@ void setup_Serial(){
 }
 
 void setup_BME280(){
+  Wire.begin();
   while(!bme.begin()){
     Serial.println("Could not find BME280 sensor!");
     delay(1000);
   }
+  BME280::TempUnit tempUnit(BME280::TempUnit_Celcius);
+  BME280::PresUnit presUnit(BME280::PresUnit_Pa);
 
 }
 
@@ -91,8 +101,13 @@ void setup_LCD(){
   lcd.backlight();    // Encendemos la luz
 }
 
+void lee_humedadSuelo(){
+  iHumedadSuelo=analogRead(PIN_HUMEDAD_SUELO);
+}
+
 void lee_datos(){
-   bme.read(pres, temp, hum, metric, pressureUnit);                   // Parameters: (float& pressure, float& temp, float& humidity, bool celsius = false, uint8_t pressureUnit = 0x0)
+   bme.read(pres, temp, hum,  pressureUnit);                   // Parameters: (float& pressure, float& temp, float& humidity,uint8_t pressureUnit = 0x0)
+   lee_humedadSuelo();
 }
 
 void serial_datos(){
@@ -106,9 +121,12 @@ void serial_datos(){
    Serial.print("% ");
 
 
-   Serial.print("\t\tPressure: ");
+   Serial.print("\t\tPresion: ");
    Serial.print(pres);
-   Serial.println(" atm");
+   Serial.print(" atm");
+
+   Serial.print("Humedad suelo: ");
+   Serial.println(iHumedadSuelo);
 
 }
 void lcd_datos(){
@@ -127,6 +145,11 @@ void lcd_datos(){
    lcd.print("P:");
    lcd.print(pres);
    lcd.print("atm");
+
+   lcd.setCursor(8,1);
+   lcd.print("HS:");
+   lcd.print(iHumedadSuelo);
+   lcd.print(" ");
 
 }
 /* ==== END Functions ==== */
