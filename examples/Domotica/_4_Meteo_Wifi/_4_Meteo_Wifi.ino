@@ -81,7 +81,7 @@ void loop() {
 
 void setup_wifi(){
   Wifi.begin();
-  Wifi.println("Web Server is up");
+  Wifi.println(F("Web Server is up"));
 }
 
 void setup_Serial(){
@@ -93,7 +93,7 @@ void setup_Serial(){
 void setup_BME280(){
   Wire.begin();
   while(!bme.begin()){
-    Serial.println("Could not find BME280 sensor!");
+    Serial.println(F("BME280 sensor mal conectado!"));
     delay(1000);
   }
 
@@ -111,37 +111,37 @@ void lee_datos(){
 }
 
 void serial_datos(){
-   Serial.print("Temp: ");
+   Serial.print(F("Temp: "));
    Serial.print(temp);
-   Serial.print("°C");
+   Serial.print(F("°C"));
 
 
-   Serial.print(" Humedad: ");
+   Serial.print(F(" Humedad: "));
    Serial.print(hum);
-   Serial.print("% ");
+   Serial.print(F("% "));
 
 
-   Serial.print("\t\tPressure: ");
+   Serial.print(F("\t\tPressure: "));
    Serial.print(pres);
-   Serial.println(" atm");
+   Serial.println(F(" atm"));
 
 }
 void lcd_datos(){
 
    lcd.setCursor(0,0);
-   lcd.print("T:");
+   lcd.print(F("T:"));
    lcd.print(temp);
 
    lcd.setCursor(8,0);
-   lcd.print("H:");
+   lcd.print(F("H:"));
    lcd.print(hum);
-   lcd.print("%");
+   lcd.print(F("%"));
 
 
    lcd.setCursor(0,1);
-   lcd.print("P:");
+   lcd.print(F("P:"));
    lcd.print(pres);
-   lcd.print("atm");
+   lcd.print(F("atm"));
 
 }
 
@@ -154,29 +154,29 @@ void process(WifiData client) {
   }
 }
 void WebServer(WifiData client) {
-  client.println("HTTP/1.1 200 OK");
-  client.println("Content-Type: text/html");
-  client.println("Connection: close");
-  client.println("Refresh: 5");  // refresh the page automatically every  sec
+  client.println(F("HTTP/1.1 200 OK"));
+  client.println(F("Content-Type: text/html"));
+  client.println(F("Connection: close"));
+  client.println(F("Refresh: 5"));  // refresh the page automatically every  sec
   client.println();
-  client.println("<html>");
-  client.println("<head> <title>Datos Meteo</title> </head>");
-  client.print("<body>");
+  client.println(F("<html>"));
+  client.println(F("<head> <title>Datos Meteo</title> </head>"));
+  client.print(F("<body>"));
 
-  client.print("Temperatura:");
+  client.print(F("Temperatura:"));
   client.print(temp);
-  client.print("<br/>");
+  client.print(F(" C<br/>"));
 
-  client.print("Humedad:");
+  client.print(F("Humedad:"));
   client.print(hum);
-  client.print("<br/>");
+  client.print(F(" % <br/>"));
 
-  client.print("Presion:");
+  client.print(F("Presion:"));
   client.print(pres);
-  client.print("<br/>");
+  client.print(F(" atm <br/>"));
 
-  client.print("</body>");
-  client.println("</html>");
+  client.print(F("</body>"));
+  client.println(F("</html>"));
   client.print(DELIMITER); // very important to end the communication !!!
 }
 
