@@ -98,9 +98,6 @@ void setup_BME280(){
     Serial.println(F("BME280 sensor mal conectado!"));
     delay(1000);
   }
-  BME280::TempUnit tempUnit(BME280::TempUnit_Celcius);
-  BME280::PresUnit presUnit(BME280::PresUnit_Pa);
-
 }
 
 void setup_wifi(){
@@ -114,11 +111,13 @@ void setup_LCD(){
 }
 
 void lee_humedadSuelo(){
-  iHumedadSuelo=analogRead(PIN_HUMEDAD_SUELO);
+  iHumedadSuelo=1023-analogRead(PIN_HUMEDAD_SUELO); // Para hacerlo mas visual
 }
 
 void lee_datos(){
-   bme.read(pres, temp, hum,  pressureUnit);                   // Parameters: (float& pressure, float& temp, float& humidity,uint8_t pressureUnit = 0x0)
+   BME280::TempUnit tempUnit(BME280::TempUnit_Celcius);
+   BME280::PresUnit presUnit(BME280::PresUnit_atm);
+   bme.read(pres, temp, hum,tempUnit,  pressureUnit);                   // Parameters: (float& pressure, float& temp, float& humidity,uint8_t pressureUnit = 0x0)
    lee_humedadSuelo();
 }
 
