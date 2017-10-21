@@ -4,6 +4,7 @@ Lectura de datos atmosferico que se muestran en el LCD
 Lectura de un sensor de humedad de suelo
 Publicamos los datos en la web
 
+Acceso wifi a 
 http://192.168.1.<ID>/arduino/webserver
 
 https://github.com/javacasm/SmartCities_Domotica#sensor-de-humedad
