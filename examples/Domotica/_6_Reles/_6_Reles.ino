@@ -5,10 +5,10 @@ Lectura de un sensor de humedad de suelo
 Publicamos los datos en la web
 Control de riego en funcion de la humedad del suelo
 
-Acceso wifi a 
+Acceso wifi a
 http://192.168.1.<ID>/arduino/webserver
 
-https://github.com/javacasm/SmartCities_Domotica#sensor-de-humedad
+https://github.com/javacasm/SmartCities_Domotica#reles-de-riego
 
 -----------------------------
 Vin (Voltage In)    ->  Vcc
@@ -213,7 +213,7 @@ void process(WifiData client) {
   if (command == "dig") {
     digitalCommand(client);
   }
-  
+
 }
 void WebServer(WifiData client) {
   client.println(F("HTTP/1.1 200 OK"));
@@ -305,7 +305,7 @@ void apagaRiego(){
 void riegoManual(){
   lcd.setCursor(14,1);
   lcd.print(MSG_RIEGO_MANUAL);
-  Serial.println(MSG_RIEGO_MANUAL); 
+  Serial.println(MSG_RIEGO_MANUAL);
   //bForzado=!bForzado;
 }
 
