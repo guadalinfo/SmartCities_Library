@@ -5,7 +5,7 @@ Publicamos los datos en la web
 
 http://192.168.1.<ID>/arduino/webserver
 
-https://github.com/javacasm/SmartCities_Domotica#sensor-bme280
+https://github.com/javacasm/SmartCities_Domotica#wifi
 
 -----------------------------
 Vin (Voltage In)    ->  Vcc
