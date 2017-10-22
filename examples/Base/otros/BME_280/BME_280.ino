@@ -67,8 +67,8 @@ void setup() {
     Serial.println("Could not find BME280 sensor!");
     delay(1000);
   }
-  
-  lcd.init();   
+
+  lcd.init();
   lcd.backlight();
 }
 /* ==== END Setup ==== */
@@ -84,7 +84,7 @@ void loop() {
 /* ==== Functions ==== */
 void printBME280Data(Stream* client){
   float temp(NAN), hum(NAN), pres(NAN);
-   uint8_t pressureUnit(3);                                           // unit: B000 = Pa, B001 = hPa, B010 = Hg, B011 = atm, B100 = bar, B101 = torr, B110 = N/m^2, B111 = psi
+                                        // unit: B000 = Pa, B001 = hPa, B010 = Hg, B011 = atm, B100 = bar, B101 = torr, B110 = N/m^2, B111 = psi
    bme.read(pres, temp, hum, metric, pressureUnit);                   // Parameters: (float& pressure, float& temp, float& humidity, bool celsius = false, uint8_t pressureUnit = 0x0)
   /* Alternatives to ReadData():
     float temp(bool celsius = false);
