@@ -42,7 +42,6 @@ SCK (Serial Clock)  ->  A5 on Uno/Pro-Mini, 21 on Mega2560/Due, 3 Leonardo/Pro-M
 
 /* ==== Defines ==== */
 #define SERIAL_BAUD 9600
-#define pressureUnit 3
 #define metric true
 /* ==== END Defines ==== */
 
