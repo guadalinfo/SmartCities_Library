@@ -19,7 +19,6 @@ After that, replace the "XXXXXXXXX" value of APIKEY_THINGSPEAK with "Write API k
 
 BME280I2C bme;
 
-#define pressureUnit 3                                           // unit: B000 = Pa, B001 = hPa, B010 = Hg, B011 = atm, B100 = bar, B101 = torr, B110 = N/m^2, B111 = psi
 #define metric true
 
 
