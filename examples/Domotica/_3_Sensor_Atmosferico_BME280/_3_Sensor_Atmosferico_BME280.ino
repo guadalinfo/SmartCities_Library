@@ -23,7 +23,7 @@ SCK (Serial Clock)  ->  A5
 
 /* ==== Defines ==== */
 #define SERIAL_BAUD 9600
-#define pressureUnit 3
+
 #define metric true
 /* ==== END Defines ==== */
 
