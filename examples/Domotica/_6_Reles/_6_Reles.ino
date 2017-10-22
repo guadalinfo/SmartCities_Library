@@ -35,7 +35,6 @@ GND   -> GND
 
 /* ==== Defines ==== */
 #define SERIAL_BAUD 9600
-#define pressureUnit 3
 
 #define PIN_HUMEDAD_SUELO A0
 
