@@ -73,8 +73,8 @@ void setup() {
     Serial.println("Could not find BME280 sensor!");
     delay(1000);
   }
-  
-  lcd.init();   
+
+  lcd.init();
   lcd.backlight();
 
 
@@ -93,7 +93,7 @@ void loop() {
    while(Wifi.available()){
       process(Wifi);
   }
-   
+
    delay(50);
 }
 /* ==== End Loop ==== */
@@ -115,7 +115,7 @@ void printGasData(Stream* client){
 
 void printBME280Data(Stream* client){
 
-   uint8_t pressureUnit(3);                                           // unit: B000 = Pa, B001 = hPa, B010 = Hg, B011 = atm, B100 = bar, B101 = torr, B110 = N/m^2, B111 = psi
+                                      // unit: B000 = Pa, B001 = hPa, B010 = Hg, B011 = atm, B100 = bar, B101 = torr, B110 = N/m^2, B111 = psi
    bme.read(pres, temp, hum, metric, pressureUnit);                   // Parameters: (float& pressure, float& temp, float& humidity, bool celsius = false, uint8_t pressureUnit = 0x0)
   /* Alternatives to ReadData():
     float temp(bool celsius = false);
@@ -202,7 +202,7 @@ void WebServer(WifiData client) {
   client.print("Co2:");
   client.print(iCO2);
   client.print("<br/>");
-  
+
   client.print("</body>");
   client.println("</html>");
   client.print(DELIMITER); // very important to end the communication !!!
