@@ -29,10 +29,6 @@ SCK (Serial Clock)  ->  A5
 /* ==== Defines ==== */
 #define SERIAL_BAUD 9600
 
-<<<<<<< HEAD
-=======
-#define metric true
->>>>>>> e341b064ca616fb22d745732795350e5590a4f1c
 /* ==== END Defines ==== */
 
 /* ==== Global Variables ==== */
