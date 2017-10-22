@@ -35,10 +35,6 @@ GND   -> GND
 
 /* ==== Defines ==== */
 #define SERIAL_BAUD 9600
-<<<<<<< HEAD
-
-=======
->>>>>>> e341b064ca616fb22d745732795350e5590a4f1c
 
 #define PIN_HUMEDAD_SUELO A0
 
