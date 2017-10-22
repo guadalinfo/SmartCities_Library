@@ -111,9 +111,15 @@ void loop() {
 
 /* ==== Functions ==== */
 void printBME280Data(Stream* client){
+<<<<<<< HEAD
+   BME280::TempUnit tempUnit(BME280::TempUnit_Celcius);
+   BME280::PresUnit presUnit(BME280::PresUnit_atm);
+   bme.read(pres, temp, hum,tempUnit, presUnit );                   // Parameters: (float& pressure, float& temp, float& humidity, bool celsius = false, uint8_t pressureUnit = 0x0)
+=======
 
                                           // unit: B000 = Pa, B001 = hPa, B010 = Hg, B011 = atm, B100 = bar, B101 = torr, B110 = N/m^2, B111 = psi
    bme.read(pres, temp, hum, metric, pressureUnit);                   // Parameters: (float& pressure, float& temp, float& humidity, bool celsius = false, uint8_t pressureUnit = 0x0)
+>>>>>>> e341b064ca616fb22d745732795350e5590a4f1c
   /* Alternatives to ReadData():
     float temp(bool celsius = false);
     float pres(uint8_t unit = 0);
@@ -147,7 +153,7 @@ void printBME280Data(Stream* client){
 
 }
 void printBME280CalculatedData(Stream* client){
-  float altitude = bme.alt(metric);
+ /* float altitude = bme.alt(metric);
   float dewPoint = bme.dew(metric);
   client->print("A: ");
   client->print(altitude);
@@ -155,7 +161,7 @@ void printBME280CalculatedData(Stream* client){
   client->print("\t\tDew point: ");
   client->print(dewPoint);
   client->println("°"+ String(metric ? 'C' :'F'));
-
+*/
   /*lcd.setCursor(8,1);
   lcd.print("A ");
   lcd.print(altitude);

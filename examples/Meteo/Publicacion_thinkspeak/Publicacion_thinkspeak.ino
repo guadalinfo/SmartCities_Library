@@ -39,8 +39,10 @@ void loop() {
   if((millis()-ultima_medida)>intervalo)    {
    float temp(NAN), hum(NAN), pres(NAN);
 
-   bme.read(pres, temp, hum, metric, pressureUnit);                   // Parameters: (float& pressure, float& temp, float& humidity, bool celsius = false, uint8_t pressureUnit = 0x0)
-
+   
+   BME280::TempUnit tempUnit(BME280::TempUnit_Celcius);
+   BME280::PresUnit presUnit(BME280::PresUnit_atm);
+   bme.read(pres, temp, hum,tempUnit, presUnit );
 
     String uri = "/update?api_key=";
     uri += APIKEY_THINGSPEAK;

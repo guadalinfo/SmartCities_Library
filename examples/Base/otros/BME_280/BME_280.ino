@@ -21,10 +21,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Written: Dec 30 2015.
 Last Updated: Sep 19 2016.
 
-Connecting the BME280 Sensor:
+Conexiones del sensor BME280 :
 Sensor              ->  Board
 -----------------------------
-Vin (Voltage In)    ->  3.3V
+Vin (Voltage In)    ->  5V
 Gnd (Ground)        ->  Gnd
 SDA (Serial Data)   ->  A4 on Uno/Pro-Mini, 20 on Mega2560/Due, 2 Leonardo/Pro-Micro
 SCK (Serial Clock)  ->  A5 on Uno/Pro-Mini, 21 on Mega2560/Due, 3 Leonardo/Pro-Micro
@@ -32,7 +32,7 @@ SCK (Serial Clock)  ->  A5 on Uno/Pro-Mini, 21 on Mega2560/Due, 3 Leonardo/Pro-M
  */
 
 #include <LiquidCrystal_I2C.h>
-
+  
 // Set the LCD address to 0x27 for a 16 chars and 2 line display
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 

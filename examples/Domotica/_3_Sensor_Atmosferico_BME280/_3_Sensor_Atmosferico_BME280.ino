@@ -53,9 +53,6 @@ void setup() {
   setup_Serial();
   setup_BME280();
   setup_LCD();
-
-
-
 }
 /* ==== END Setup ==== */
 
@@ -84,8 +81,7 @@ void setup_BME280(){
     Serial.println("Could not find BME280 sensor!");
     delay(1000);
   }
- BME280::TempUnit tempUnit(BME280::TempUnit_Celcius);
- BME280::PresUnit presUnit(BME280::PresUnit_Pa);
+
 
 }
 
@@ -95,7 +91,9 @@ void setup_LCD(){
 }
 
 void lee_datos(){
-   bme.read(pres, temp, hum, pressureUnit);                   // Parameters: (float& pressure, float& temp, float& humidity,  uint8_t pressureUnit = 0x0)
+ BME280::TempUnit tempUnit(BME280::TempUnit_Celcius);
+ BME280::PresUnit presUnit(BME280::PresUnit_atm);  
+   bme.read(pres, temp, hum,tempUnit, presUnit);                   // Parameters: (float& pressure, float& temp, float& humidity,  uint8_t pressureUnit = 0x0)
 }
 
 void serial_datos(){

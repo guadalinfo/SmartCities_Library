@@ -47,7 +47,6 @@ B      ->    3
 
 /* ==== Defines ==== */
 #define SERIAL_BAUD 9600
-#define pressureUnit 3
 
 #define PIN_HUMEDAD_SUELO A0
 
@@ -198,7 +197,7 @@ void lee_luzExterior(){
 void lee_datos(){
    BME280::TempUnit tempUnit(BME280::TempUnit_Celcius);
    BME280::PresUnit presUnit(BME280::PresUnit_atm);
-   bme.read(pres, temp, hum,tempUnit,  pressureUnit);                   // Parameters: (float& pressure, float& temp, float& humidity,uint8_t pressureUnit = 0x0)
+   bme.read(pres, temp, hum,tempUnit,  presUnit);                   // Parameters: (float& pressure, float& temp, float& humidity,uint8_t pressureUnit = 0x0)
 
    lee_humedadSuelo();
 

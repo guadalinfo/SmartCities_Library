@@ -29,7 +29,10 @@ SCK (Serial Clock)  ->  A5
 /* ==== Defines ==== */
 #define SERIAL_BAUD 9600
 
+<<<<<<< HEAD
+=======
 #define metric true
+>>>>>>> e341b064ca616fb22d745732795350e5590a4f1c
 /* ==== END Defines ==== */
 
 /* ==== Global Variables ==== */
@@ -108,7 +111,7 @@ void setup_LCD(){
 void lee_datos(){
    BME280::TempUnit tempUnit(BME280::TempUnit_Celcius);
    BME280::PresUnit presUnit(BME280::PresUnit_atm);
-   bme.read(pres, temp, hum, tempUnit, pressureUnit);                   // Parameters: (float& pressure, float& temp, float& humidity,  uint8_t pressureUnit = 0x0)
+   bme.read(pres, temp, hum, tempUnit, presUnit);                   // Parameters: (float& pressure, float& temp, float& humidity,  uint8_t pressureUnit = 0x0)
 }
 
 void serial_datos(){
