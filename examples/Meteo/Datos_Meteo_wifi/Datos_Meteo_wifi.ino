@@ -35,8 +35,6 @@ SCK (Serial Clock)  ->  A5 on Uno/Pro-Mini, 21 on Mega2560/Due, 3 Leonardo/Pro-M
 
 #include <LiquidCrystal_I2C.h>
 
-// Set the LCD address to 0x27 for a 16 chars and 2 line display
-LiquidCrystal_I2C lcd(0x48, 16, 2);
 
 /* ==== Includes ==== */
 #include <UnoWiFiDevEd.h>
@@ -45,7 +43,7 @@ LiquidCrystal_I2C lcd(0x48, 16, 2);
 /* ====  END Includes ==== */
 
 /* ==== Defines ==== */
-#define SERIAL_BAUD 115200
+#define SERIAL_BAUD 9600
 
 #define PIN_CO2 A0
 #define PIN_GAS A1
@@ -54,41 +52,62 @@ LiquidCrystal_I2C lcd(0x48, 16, 2);
 /* ==== END Defines ==== */
 
 /* ==== Global Variables ==== */
-BME280I2C bme;                   // Default : forced mode, standby time = 1000 ms
-                              // Oversampling = pressure ×1, temperature ×1, humidity ×1, filter off,
+BME280I2C bme;    // Default : forced mode, standby time = 1000 ms
+                  // Oversampling = pressure ×1, temperature ×1, humidity ×1, filter off,
+
+float temp(NAN), hum(NAN), pres(NAN);
+int iGas,iCO2;
+
+// Set the LCD address to 0x27 for a 16 chars and 2 line display
+LiquidCrystal_I2C lcd(0x3F, 16, 2);
+
 
 /* ==== END Global Variables ==== */
 
 
 /* ==== Prototypes ==== */
-/* === Print a message to stream with the temp, humidity and pressure. === */
-void printBME280Data(Stream * client);
-/* === Print a message to stream with the altitude, and dew point. === */
-void printBME280CalculatedData(Stream* client);
 /* ==== END Prototypes ==== */
 
 /* ==== Setup ==== */
-void setup() {
+
+void setup_serial(){
   Serial.begin(SERIAL_BAUD);
   while(!Serial) {} // Wait
+}
+
+void setup_lcd(){
+    lcd.init();
+  lcd.backlight();
+}
+
+void setup_sensor(){
   while(!bme.begin()){
-    Serial.println("Could not find BME280 sensor!");
+    Serial.println(F("Could not find BME280 sensor!"));
+    lcd.setCursor(0,0);
+    lcd.print(F("Could not find BME280 sensor!"));
     delay(1000);
   }
 
-  lcd.init();
-  lcd.backlight();
+}
 
-
+void setup_wifi(){
   Wifi.begin();
-  Wifi.println("Web Server is up");
+  Wifi.println(F("Web Server is up"));
+
+}
+
+void setup() {
+  setup_serial();
+  setup_lcd();
+  setup_sensor();
+  setup_wifi();
+
 }
 /* ==== END Setup ==== */
 
 /* ==== Loop ==== */
 void loop() {
    printBME280Data(&Serial);
-   printBME280CalculatedData(&Serial);
 
    printGasData(&Serial);
 
@@ -96,79 +115,54 @@ void loop() {
       process(Wifi);
   }
 
-   delay(50);
+   delay(500);
 }
 /* ==== End Loop ==== */
-  float temp(NAN), hum(NAN), pres(NAN);
-  int iGas,iCO2;
+
 /* ==== Functions ==== */
 void printGasData(Stream* client){
   iGas=analogRead(PIN_GAS);
   iCO2=analogRead(PIN_CO2);
-  client->print("Gas:");
+  client->print(F("\tGas:"));
   client->print(iGas);
-  client->print("Co2:");
-  client->print(iCO2);
-  lcd.setCursor(1,10);
+  client->print(F("Co2:"));
+  client->println(iCO2);
+  lcd.setCursor(0,1);
+  lcd.print("Gas:");
   lcd.print(iGas);
-  lcd.print(" ");
-  lcd.print(iGas);
+  lcd.print(" CO2:");
+  lcd.print(iCO2);
 }
 
 void printBME280Data(Stream* client){
 
-                                        // unit: B000 = Pa, B001 = hPa, B010 = Hg, B011 = atm, B100 = bar, B101 = torr, B110 = N/m^2, B111 = psi
    BME280::TempUnit tempUnit(BME280::TempUnit_Celcius);
    BME280::PresUnit presUnit(BME280::PresUnit_atm);
+
    bme.read(pres, temp, hum,tempUnit, presUnit );                    // Parameters: (float& pressure, float& temp, float& humidity, bool celsius = false, uint8_t pressureUnit = 0x0)
 
-  /* Alternatives to ReadData():
-    float temp(bool celsius = false);
-    float pres(uint8_t unit = 0);
-    float hum();
 
-    Keep in mind the temperature is used for humidity and
-    pressure calculations. So it is more effcient to read
-    temperature, humidity and pressure all together.
-   */
-  client->print("Temp: ");
+  client->print(F("T: "));
   client->print(temp);
   lcd.setCursor(0,0);
-  lcd.print("T:");
-  lcd.print(temp);
-  //lcd.print("c");
+  lcd.print(F("T:"));
+  lcd.print(int(temp));
+  lcd.print(" ");
   client->print("°"+ String(metric ? 'C' :'F'));
-  client->print("\t\tHumidity: ");
+  client->print(F("\tH: "));
   client->print(hum);
-  lcd.setCursor(8,0);
+  lcd.setCursor(5,0);
   lcd.print("H:");
-  lcd.print(hum);
+  lcd.print(int(hum));
   lcd.print("%");
-  client->print("% RH");
-  client->print("\t\tPressure: ");
+  client->print(F("%\tP: "));
   client->print(pres);
-  client->print(" atm");
-  lcd.setCursor(0,1);
+  client->print(F(" a"));
+  lcd.setCursor(10,0);
   lcd.print("P:");
   lcd.print(pres);
   lcd.print("atm");
 
-}
-void printBME280CalculatedData(Stream* client){
-  //float altitude = bme.alt(metric);
-  //float dewPoint = bme.dew(metric);
-  //client->print("A: ");
-  //client->print(altitude);
-  //client->print((metric ? "m" : "ft"));
-  //client->print("\t\tDew point: ");
-  //client->print(dewPoint);
-  //client->println("°"+ String(metric ? 'C' :'F'));
-
-  /*lcd.setCursor(8,1);
-  lcd.print("A ");
-  lcd.print(altitude);
-  lcd.print((metric ? "m" : "ft"));
-*/
 }
 
 void process(WifiData client) {
@@ -180,36 +174,36 @@ void process(WifiData client) {
   }
 }
 void WebServer(WifiData client) {
-  client.println("HTTP/1.1 200 OK");
-  client.println("Content-Type: text/html");
-  client.println("Connection: close");
-  client.println("Refresh: 5");  // refresh the page automatically every  sec
+  client.println(F("HTTP/1.1 200 OK"));
+  client.println(F("Content-Type: text/html"));
+  client.println(F("Connection: close"));
+  client.println(F("Refresh: 5"));  // refresh the page automatically every  sec
   client.println();
-  client.println("<html>");
-  client.println("<head> <title>UNO WIFI Example</title> </head>");
-  client.print("<body>");
+  client.println(F("<html>"));
+  client.println(F("<head> <title>UNO WIFI Example</title> </head>"));
+  client.print(F("<body>"));
 
-  client.print("Temperatura:");
+  client.print(F("Temperatura:"));
   client.print(temp);
-  client.print("<br/>");
+  client.print(F("<br/>"));
 
-  client.print("Humedad:");
+  client.print(F("Humedad:"));
   client.print(hum);
-  client.print("<br/>");
+  client.print(F("<br/>"));
 
-  client.print("Presion:");
+  client.print(F("Presion:"));
   client.print(pres);
-  client.print("<br/>");
+  client.print(F("<br/>"));
 
-  client.print("Gas:");
+  client.print(F("Gas:"));
   client.print(iGas);
-  client.print("<br/>");
-  client.print("Co2:");
+  client.print(F("<br/>"));
+  client.print(F("Co2:"));
   client.print(iCO2);
-  client.print("<br/>");
+  client.print(F("<br/>"));
 
-  client.print("</body>");
-  client.println("</html>");
+  client.print(F("</body>"));
+  client.println(F("</html>"));
   client.print(DELIMITER); // very important to end the communication !!!
 }
 
