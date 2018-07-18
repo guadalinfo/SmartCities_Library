@@ -1,4 +1,4 @@
-# Ejemplos para los Talleres de SmartCities para Fundación de lo Ríos
+# Ejemplos para los Talleres de SmartCities para el Consorcio Fernando de lo Ríos
 
 Se dividen en 5 categorías:
 
